@@ -3,8 +3,8 @@ import 'package:gap/gap.dart';
 
 import '../../theme/colors.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({
+class AbilitiesPage extends StatelessWidget {
+  const AbilitiesPage({
     Key? key,
   }) : super(key: key);
 

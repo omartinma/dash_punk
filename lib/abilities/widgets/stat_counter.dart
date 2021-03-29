@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../theme/colors.dart';
+import '../../theme/colors.dart';
 
 const minStat = 0.0;
 const maxStat = 4.0;
