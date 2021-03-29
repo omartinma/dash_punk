@@ -1,8 +1,6 @@
 // @dart=2.9
 
 import 'package:flutter/material.dart';
-import 'package:binder/binder.dart';
-
 import 'theme/colors.dart';
 import 'ui/home/screen.dart';
 
@@ -15,15 +13,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BinderScope(
-      child: MaterialApp(
-        title: 'Dash Punk',
-        theme: ThemeData(
-          primaryColor: FlutterColors.primary,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: const HomeScreen(),
+    return MaterialApp(
+      title: 'Dash Punk',
+      theme: ThemeData(
+        primaryColor: FlutterColors.primary,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      home: const HomeScreen(),
     );
   }
 }
