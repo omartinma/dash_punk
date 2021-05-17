@@ -1,4 +1,6 @@
+import 'package:dash_punk/abilities/bloc/abilities_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../theme/colors.dart';
@@ -10,39 +12,62 @@ class StatCounter extends StatelessWidget {
   const StatCounter({
     Key? key,
     required this.label,
+    required this.currentStatValue,
+    required this.currentValueToLevelUp,
+    required this.onDecrement,
+    required this.onIncrement,
+    required this.stat,
   }) : super(key: key);
 
   final String label;
-
+  final int currentStatValue;
+  final int currentValueToLevelUp;
+  final Function onDecrement;
+  final Function onIncrement;
+  final Stat stat;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      decoration: ShapeDecoration(
-        color: FlutterColors.secondary.withOpacity(0.1),
-        shape: const StadiumBorder(
-          side: BorderSide(
-            color: FlutterColors.secondary,
-            width: 2,
+    return BlocBuilder<AbilitiesBloc, AbilitiesState>(
+      builder: (context, state) {
+        return Container(
+          margin: const EdgeInsets.all(8),
+          decoration: ShapeDecoration(
+            color: FlutterColors.secondary.withOpacity(0.1),
+            shape: const StadiumBorder(
+              side: BorderSide(
+                color: FlutterColors.secondary,
+                width: 2,
+              ),
+            ),
           ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Gap(16),
-          Expanded(
-              child: StatName(
-            label: label,
-          )),
-          //StatValue(),
-          Gap(16),
-          //Difference(),
-          Gap(32),
-          //DecrementButton(),
-          //IncrementButton(),
-        ],
-      ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Gap(16),
+              Expanded(
+                  child: StatName(
+                label: label,
+              )),
+              StatValue(
+                value: state.stats[stat] ?? 0,
+              ),
+              Gap(16),
+              Difference(
+                value: state.statsToLevelUp[stat] ?? 0,
+              ),
+              Gap(32),
+              DecrementButton(
+                enabled: currentStatValue > minStat,
+                onPressed: onDecrement,
+              ),
+              IncrementButton(
+                enabled: currentStatValue < maxStat,
+                onPressed: onIncrement,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -127,13 +152,13 @@ class DecrementButton extends StatelessWidget {
   }) : super(key: key);
 
   final bool enabled;
-  final VoidCallback onPressed;
+  final Function onPressed;
 
   @override
   Widget build(BuildContext context) {
     return _StatButton(
       icon: Icons.remove,
-      onPressed: enabled ? onPressed : null,
+      onPressed: enabled ? () => onPressed.call : null,
     );
   }
 }
@@ -147,13 +172,13 @@ class IncrementButton extends StatelessWidget {
   }) : super(key: key);
 
   final bool enabled;
-  final VoidCallback onPressed;
+  final Function onPressed;
 
   @override
   Widget build(BuildContext context) {
     return _StatButton(
       icon: Icons.add,
-      onPressed: enabled ? onPressed : null,
+      onPressed: enabled ? () => onPressed.call : null,
     );
   }
 }

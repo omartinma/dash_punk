@@ -1,29 +1,56 @@
+import 'package:dash_punk/abilities/bloc/abilities_bloc.dart';
+import 'package:dash_punk/abilities/widgets/stat_counter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../theme/colors.dart';
 
 class AbilitiesPage extends StatelessWidget {
-  const AbilitiesPage({
+  const AbilitiesPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<AbilitiesBloc>(
+      create: (context) => AbilitiesBloc(),
+      child: const AbilitiesView(),
+    );
+  }
+}
+
+class AbilitiesView extends StatelessWidget {
+  const AbilitiesView({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: const [
-              Gap(16),
-              Header(),
-              Gap(32),
-              RemainingPoints(),
-              Gap(16),
-              LevelUpButton(),
-            ],
-          ),
-        ),
+      body: BlocBuilder<AbilitiesBloc, AbilitiesState>(
+        builder: (context, state) {
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Gap(16),
+                  Header(),
+                  Gap(32),
+                  RemainingPoints(),
+                  Gap(16),
+                  StatCounter(
+                    label: 'STRENGTH',
+                    currentStatValue: state.stats[Stat.strength] ?? 0,
+                    currentValueToLevelUp: 0,
+                    onDecrement: () => print("onDecrement"),
+                    onIncrement: () => print("onIncrement"),
+                    stat: Stat.strength,
+                  ),
+                  LevelUpButton(),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -117,11 +144,14 @@ class Level extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final level = 0;
 
-    return Text(
-      'Level $level',
-      style: textTheme.headline6,
+    return BlocBuilder<AbilitiesBloc, AbilitiesState>(
+      builder: (context, state) {
+        return Text(
+          'Level ${state.level}',
+          style: textTheme.headline6,
+        );
+      },
     );
   }
 }
@@ -134,11 +164,14 @@ class RemainingPoints extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unaffected = 0;
     final textTheme = Theme.of(context).textTheme;
-    return Text(
-      '$unaffected points remaining',
-      style: textTheme.headline5,
+    return BlocBuilder<AbilitiesBloc, AbilitiesState>(
+      builder: (context, state) {
+        return Text(
+          '${state.unaffectedPoints} points remaining',
+          style: textTheme.headline5,
+        );
+      },
     );
   }
 }

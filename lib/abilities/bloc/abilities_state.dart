@@ -1,10 +1,12 @@
 part of 'abilities_bloc.dart';
 
 class AbilitiesState extends Equatable {
-  final Map<dynamic, int> stats;
-  final Map<dynamic, int> currentLevelup;
+  final Map<Stat, int> stats;
+  final Map<Stat, int> statsToLevelUp;
   final int level;
-  const AbilitiesState(this.stats, this.currentLevelup, this.level);
+  final int unaffectedPoints;
+  const AbilitiesState(
+      this.stats, this.statsToLevelUp, this.level, this.unaffectedPoints);
 
   @override
   // TODO: implement props
@@ -13,10 +15,15 @@ class AbilitiesState extends Equatable {
 
 class AbilitiesInitial extends AbilitiesState {
   AbilitiesInitial()
-      : super(<Stat, int>{
-          Stat.strength: 1,
-          Stat.agility: 1,
-          Stat.wisdom: 1,
-          Stat.charisma: 1,
-        }, <Stat, int>{}, 1);
+      : super(
+          <Stat, int>{
+            Stat.strength: 1,
+            Stat.agility: 1,
+            Stat.wisdom: 1,
+            Stat.charisma: 1,
+          },
+          <Stat, int>{},
+          1,
+          8,
+        );
 }
